@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An interactive 22-week battle plan for becoming an inference engineer.">
+  <title>The Inference Engineer's 22-Week Battle Plan</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,650&family=Inter+Tight:wght@400;500;600;700;800&display=swap");
+
+    :root {
+      --paper: #f4f0e5;
+      --paper-deep: #e9e3d5;
+      --ink: #171613;
+      --muted: #6d685e;
+      --line: rgba(23, 22, 19, 0.18);
+      --line-strong: rgba(23, 22, 19, 0.72);
+      --coral: #d44b38;
+      --teal: #168778;
+      --blue: #366bc9;
+      --gold: #c89522;
+      --violet: #7c5bb3;
+      --shadow: 5px 5px 0 rgba(23, 22, 19, 0.9);
+      --sans: "Inter Tight", Arial, sans-serif;
+      --serif: "Fraunces", Georgia, serif;
+      --mono: "DM Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--sans);
+      background-color: var(--paper);
+      background-image:
+        linear-gradient(rgba(23,22,19,.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23,22,19,.055) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    button, input { font: inherit; }
+    a { color: inherit; }
+    button { color: inherit; }
+    ::selection { background: #f3b4a9; }
+
+    .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(244, 240, 229, .93);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand-mark {
+      width: 35px; height: 35px; border: 1.5px solid var(--ink); border-radius: 50%;
+      position: relative; background: conic-gradient(var(--coral) 0 25%, var(--gold) 0 50%, var(--teal) 0 75%, var(--blue) 0);
+    }
+    .brand-mark::after {
+      content: ""; position: absolute; inset: 8px; border-radius: 50%; background: var(--paper); border: 1px solid var(--ink);
+    }
+    .brand-copy strong { display: block; font-size: 14px; line-height: 1; }
+    .brand-copy span { display: block; margin-top: 4px; font: 10px var(--mono); text-transform: uppercase; letter-spacing: .11em; color: var(--muted); }
+    .topnav { display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
+    .topnav button, .filter, .search {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.18);
+      padding: 9px 12px;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    .topnav button:hover, .filter:hover { border-color: var(--ink); transform: translateY(-2px); }
+
+    .hero {
+      min-height: 650px;
+      padding: 72px 0 58px;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      align-items: end;
+      gap: 56px;
+    }
+    .eyebrow, .kicker, .track-label {
+      font: 500 11px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .13em;
+    }
+    .eyebrow { color: #7f6a29; margin-bottom: 20px; }
+    h1 {
+      font-size: clamp(60px, 8.4vw, 112px);
+      line-height: .84;
+      letter-spacing: -.065em;
+      margin: 0;
+      max-width: 850px;
+    }
+    h1 em { color: var(--coral); font-family: var(--serif); font-weight: 400; }
+    .hero-sub {
+      max-width: 730px;
+      font-family: var(--serif);
+      font-size: clamp(20px, 2vw, 29px);
+      font-style: italic;
+      line-height: 1.4;
+      color: #4e4a43;
+      margin: 32px 0 0;
+    }
+    .brief {
+      border: 1.5px solid var(--ink);
+      background: rgba(250,248,241,.86);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .brief p { font-size: 17px; line-height: 1.55; color: #4f4a42; margin: 14px 0 22px; }
+    .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .stat { background: var(--paper-deep); border: 1px solid var(--line); padding: 14px; }
+    .stat strong { font-size: 29px; display: block; line-height: 1; }
+    .stat span { font: 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+
+    .mission {
+      padding: 52px 0;
+      display: grid;
+      grid-template-columns: .55fr 1.45fr;
+      gap: 50px;
+      border-bottom: 1px solid var(--line);
+    }
+    .mission h2 { font: 500 clamp(38px, 5vw, 70px)/.95 var(--serif); margin: 8px 0 0; }
+    .mission-copy { font-size: 24px; line-height: 1.35; margin: 0; }
+    .mission-copy strong { color: var(--coral); }
+    .principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 28px; }
+    .principle { border-top: 3px solid var(--ink); padding: 13px 4px; font: 12px/1.5 var(--mono); }
+
+    .controls-wrap { padding: 48px 0 26px; }
+    .controls-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+    .controls-head h2 { font-size: clamp(45px, 6vw, 78px); letter-spacing: -.05em; line-height: .95; margin: 8px 0 0; }
+    .progress-copy { text-align: right; min-width: 180px; }
+    .progress-copy strong { font-size: 36px; }
+    .progress-bar { width: 180px; height: 7px; margin-top: 8px; border: 1px solid var(--ink); background: var(--paper-deep); }
+    .progress-fill { height: 100%; width: 0; background: var(--teal); transition: width .3s; }
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 32px 0 12px; }
+    .filter { font: 11px var(--mono); text-transform: uppercase; letter-spacing: .05em; }
+    .filter.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .search { width: 100%; padding: 13px 15px; outline: none; font-family: var(--mono); }
+    .search:focus { border-color: var(--ink); box-shadow: 3px 3px 0 var(--gold); }
+
+    .roadmap { padding: 12px 0 90px; }
+    .phase { margin-top: 58px; }
+    .phase-head {
+      display: grid;
+      grid-template-columns: 140px 1fr auto;
+      gap: 24px;
+      align-items: baseline;
+      padding-bottom: 13px;
+      border-bottom: 2px solid var(--ink);
+    }
+    .phase-index { font: 11px var(--mono); text-transform: uppercase; letter-spacing: .12em; color: var(--phase-color); }
+    .phase-title { font: 500 clamp(30px, 4vw, 54px)/1 var(--serif); margin: 0; }
+    .phase-weeks { font: 11px var(--mono); color: var(--muted); }
+    .week-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 18px; }
+    .week-card {
+      border: 1.5px solid var(--ink);
+      background: rgba(249,247,239,.9);
+      overflow: hidden;
+      transition: .2s ease;
+    }
+    .week-card:hover { transform: translateY(-3px); box-shadow: 5px 5px 0 color-mix(in srgb, var(--phase-color) 70%, var(--ink)); }
+    .week-card.hidden { display: none; }
+    .week-card.done { opacity: .66; }
+    .week-card.done .week-title { text-decoration: line-through; text-decoration-thickness: 2px; }
+    .week-top {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: start;
+      cursor: pointer;
+    }
+    .week-no {
+      width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center;
+      border: 1.5px solid var(--ink); background: var(--phase-color); color: white;
+      font: 500 17px var(--mono);
+    }
+    .week-title { font-size: 22px; line-height: 1.1; margin: 2px 0 7px; }
+    .week-goal { color: var(--muted); font-size: 14px; line-height: 1.45; margin: 0; }
+    .week-toggle {
+      width: 32px; height: 32px; border: 1px solid var(--ink); background: transparent; cursor: pointer; font-size: 20px;
+    }
+    .week-card.open .week-toggle { background: var(--ink); color: var(--paper); transform: rotate(45deg); }
+    .week-meta {
+      border-top: 1px solid var(--line);
+      padding: 11px 20px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      font: 10px var(--mono);
+      text-transform: uppercase;
+    }
+    .tag { padding: 5px 7px; background: var(--paper-deep); border: 1px solid var(--line); }
+    .complete-label { margin-left: auto; display: flex; align-items: center; gap: 7px; cursor: pointer; }
+    .complete-label input { accent-color: var(--teal); width: 16px; height: 16px; }
+    .days {
+      display: none;
+      border-top: 1.5px solid var(--ink);
+      padding: 8px 20px 18px;
+      background: color-mix(in srgb, var(--phase-color) 5%, var(--paper));
+    }
+    .week-card.open .days { display: block; }
+    .day {
+      display: grid;
+      grid-template-columns: 62px 1fr;
+      gap: 14px;
+      padding: 13px 0;
+      border-bottom: 1px dotted var(--line-strong);
+    }
+    .day:last-child { border-bottom: 0; }
+    .day-name { font: 500 10px var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--phase-color); }
+    .day strong { display: block; font-size: 14px; margin-bottom: 4px; }
+    .day p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .refs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+    .ref-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 7px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.42);
+      color: var(--ink);
+      font: 500 9px var(--mono);
+      text-transform: uppercase;
+      letter-spacing: .035em;
+      text-decoration: none;
+      transition: .16s ease;
+    }
+    .ref-link::after { content: "↗"; color: var(--phase-color); }
+    .ref-link:hover { border-color: var(--phase-color); color: var(--phase-color); transform: translateY(-1px); }
+
+    .finale {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 80px 0;
+    }
+    .finale-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 60px; align-items: center; }
+    .finale h2 { margin: 8px 0 18px; font: 400 clamp(50px, 7vw, 91px)/.93 var(--serif); letter-spacing: -.04em; }
+    .finale h2 em { color: #ef6d58; }
+    .finale p { color: #c9c2b5; font-size: 19px; line-height: 1.55; max-width: 650px; }
+    .deliverables { border: 1px solid rgba(244,240,229,.4); }
+    .deliverable { padding: 17px 20px; border-bottom: 1px solid rgba(244,240,229,.22); display: flex; gap: 14px; align-items: center; }
+    .deliverable:last-child { border: 0; }
+    .deliverable b { color: #ef6d58; font: 14px var(--mono); }
+    footer { background: var(--ink); color: #8e887d; border-top: 1px solid #393631; padding: 22px 0; font: 10px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+    .empty { display:none; text-align:center; padding:60px 20px; border:1px dashed var(--ink); margin-top:30px; font: 16px var(--mono); }
+
+    @media (max-width: 850px) {
+      .topnav { display: none; }
+      .hero, .mission, .finale-grid { grid-template-columns: 1fr; }
+      .hero { padding-top: 50px; min-height: auto; }
+      .mission { gap: 22px; }
+      .week-grid { grid-template-columns: 1fr; }
+      .phase-head { grid-template-columns: 1fr auto; }
+      .phase-index { grid-column: 1 / -1; }
+      .principles { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 24px, 1180px); }
+      .hero { gap: 34px; }
+      h1 { font-size: 55px; }
+      .controls-head { align-items: start; }
+      .progress-copy { min-width: 110px; }
+      .progress-bar { width: 110px; }
+      .week-top { grid-template-columns: auto 1fr; }
+      .week-toggle { display: none; }
+      .week-no { width: 44px; height: 44px; }
+      .phase-weeks { display: none; }
+      .day { grid-template-columns: 52px 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-copy"><strong>Inference Field Manual</strong><span>22-week battle plan</span></span>
+      </a>
+      <nav class="topnav" aria-label="Page sections">
+        <button data-jump="roadmap">Roadmap</button>
+        <button data-filter="foundations">Foundations</button>
+        <button data-filter="kernels">Kernels</button>
+        <button data-filter="engine">Engine</button>
+        <button data-filter="launch">Launch</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="shell hero">
+      <div>
+        <div class="eyebrow">From strong ML foundations to frontier-lab offers</div>
+        <h1>Build the <em>machine</em> that makes intelligence fast.</h1>
+        <p class="hero-sub">A day-by-day field guide to CUDA kernels, modern LLM serving, ruthless benchmarking, and two flagship open-source releases.</p>
+      </div>
+      <aside class="brief">
+        <span class="kicker">Your mission</span>
+        <p>Ship proof, not promises: one Hopper-native kernel library, one vLLM-class inference engine, and a public record of every performance number you moved.</p>
+        <div class="stats">
+          <div class="stat"><strong>22</strong><span>weeks</span></div>
+          <div class="stat"><strong>880</strong><span>focused hours</span></div>
+          <div class="stat"><strong>2</strong><span>flagship repos</span></div>
+          <div class="stat"><strong>1+</strong><span>upstream PR</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="shell mission">
+      <div><span class="kicker">The strategic thesis</span><h2>Measured work wins.</h2></div>
+      <div>
+        <p class="mission-copy">Every target role converges on the same spine: <strong>kernels, KV cache, batching, quantization, parallelism, and profiling.</strong> The plan turns that spine into visible evidence.</p>
+        <div class="principles">
+          <div class="principle">01 / Benchmark before and after every optimization.</div>
+          <div class="principle">02 / Cut features before you cut correctness or documentation.</div>
+          <div class="principle">03 / Lead every project story with the number you moved.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell controls-wrap" id="roadmap">
+      <div class="controls-head">
+        <div><span class="kicker">The complete campaign</span><h2>22 weeks. Day by day.</h2></div>
+        <div class="progress-copy"><strong id="progressText">0%</strong><div>mission complete</div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div></div>
+      </div>
+      <div class="filters" role="group" aria-label="Filter roadmap">
+        <button class="filter active" data-filter="all">All phases</button>
+        <button class="filter" data-filter="foundations">01 Foundations</button>
+        <button class="filter" data-filter="kernels">02 Kernel library</button>
+        <button class="filter" data-filter="engine">03 Serving engine</button>
+        <button class="filter" data-filter="launch">04 Launch</button>
+      </div>
+      <input class="search" id="search" type="search" placeholder="Search weeks, skills, kernels, papers, deliverables..." aria-label="Search roadmap">
+    </section>
+
+    <section class="shell roadmap" id="roadmapRoot"></section>
+    <div class="shell empty" id="empty">No mission cards match that search.</div>
+
+    <section class="finale">
+      <div class="shell finale-grid">
+        <div>
+          <span class="kicker">The finish line</span>
+          <h2>Leave a trail of <em>numbers.</em></h2>
+          <p>Your portfolio should make the interview obvious: a real kernel, a real serving system, a profiler trace, a benchmark curve, and a clear explanation of what failed before it worked.</p>
+        </div>
+        <div class="deliverables">
+          <div class="deliverable"><b>01</b><span>Hopper/Blackwell-native kernel library v1.0</span></div>
+          <div class="deliverable"><b>02</b><span>vLLM-class inference engine v1.0</span></div>
+          <div class="deliverable"><b>03</b><span>Two deeply technical benchmark essays</span></div>
+          <div class="deliverable"><b>04</b><span>At least one substantive upstream OSS PR</span></div>
+          <div class="deliverable"><b>05</b><span>Interview-ready performance stories</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer><div class="shell">Built as a working field manual. Progress is stored locally in your browser.</div></footer>
+
+  <script>
+    const phases = {
+      foundations: { index: "Phase 01", title: "Pre-flight: CUDA & profiling", weeks: "Weeks 1–2", color: "#c89522" },
+      kernels: { index: "Phase 02", title: "Flagship I: Kernel library", weeks: "Weeks 3–12", color: "#d44b38" },
+      engine: { index: "Phase 03", title: "Flagship II: Inference engine", weeks: "Weeks 13–20", color: "#168778" },
+      launch: { index: "Phase 04", title: "Polish, publish & interview", weeks: "Weeks 21–22", color: "#366bc9" }
+    };
+
+    const weeks = [
+      {n:1,p:"foundations",t:"GPU foundations & the profiler loop",g:"Build the mental model and a reusable benchmark harness.",tags:["CUDA","Nsight","Roofline"],days:[
+        ["Mon","GPU execution model","PMPP Ch. 1–3; map grids, blocks, warps, and memory to a vector-add kernel."],
+        ["Tue","Naive matrix multiply","PMPP Ch. 4–5; write and validate a first CUDA matmul baseline."],
+        ["Wed","Memory hierarchy","Study coalescing, shared memory, bank conflicts, and warp divergence."],
+        ["Thu","Tiled GEMM","Implement shared-memory tiling; compare against the naive baseline."],
+        ["Fri","Profile, don't guess","Use Nsight Systems and Compute; record occupancy, bandwidth, and bottlenecks."],
+        ["Sat","Publish field notes","Turn kernels 1–3 and profiler screenshots into a short technical write-up."],
+        ["Sun","Paper hour","Read FlashAttention-1 and annotate the IO-complexity argument."]
+      ]},
+      {n:2,p:"foundations",t:"Reductions, softmax & Triton",g:"Finish the warm-up library and establish benchmark discipline.",tags:["Triton","Softmax","RMSNorm"],days:[
+        ["Mon","Reduction ladder","Implement successive reduction optimizations and explain each speedup."],
+        ["Tue","Stable fused softmax","Build row-wise softmax with max subtraction and warp reductions."],
+        ["Wed","Triton fundamentals","Port softmax to Triton; learn programs, blocks, masks, and autotuning."],
+        ["Thu","Triton RMSNorm","Implement and test RMSNorm; compare eager PyTorch and torch.compile."],
+        ["Fri","Lock the harness","Add warmups, percentiles, variance, shape sweeps, and reproducible configs."],
+        ["Sat","Source-code safari","Map the FlashAttention repo and identify the forward-path entry points."],
+        ["Sun","Paper hour","Read FlashAttention-2 and summarize how work partitioning changed."]
+      ]},
+      {n:3,p:"kernels",t:"GEMM I: climb toward cuBLAS",g:"Reach a credible fraction of cuBLAS on transformer-relevant shapes.",tags:["SGEMM","Tiling","Registers"],days:[
+        ["Mon","Register blocking","Implement 1D and 2D register tiling from the Boehm worklog."],
+        ["Tue","Vectorized memory","Add float4 loads/stores and verify alignment assumptions."],
+        ["Wed","Warp tiling","Assign output tiles per warp and inspect register pressure."],
+        ["Thu","Double buffering","Overlap global-to-shared movement with compute where practical."],
+        ["Fri","Shape sweep","Benchmark square, tall-skinny, and transformer MLP shapes."],
+        ["Sat","Optimization narrative","Document every version, profiler delta, and failed idea."],
+        ["Sun","Recovery","One paper or full rest."]
+      ]},
+      {n:4,p:"kernels",t:"GEMM II: autotuning & CuTe",g:"Build an autotuned Triton path and understand modern tile abstractions.",tags:["Autotune","CUTLASS","CuTe"],days:[
+        ["Mon","Triton GEMM","Write a blocked matmul with grouped program ordering."],
+        ["Tue","Autotune configs","Search block sizes, warps, and stages across target shapes."],
+        ["Wed","CUTLASS anatomy","Trace layouts, threadblock swizzles, epilogues, and dispatch."],
+        ["Thu","CuTe concepts","Practice shapes, strides, layouts, tensors, and tiled MMA."],
+        ["Fri","Head-to-head","Compare custom CUDA, Triton, torch.matmul, and cuBLAS."],
+        ["Sat","GEMM report","Publish a compact benchmark matrix and architecture explanation."],
+        ["Sun","Recovery","Review notes and reset."]
+      ]},
+      {n:5,p:"kernels",t:"FlashAttention forward",g:"Implement exact tiled attention with online softmax.",tags:["Attention","Online softmax","SDPA"],days:[
+        ["Mon","Derive online softmax","Prove the running max and normalization recurrence by hand."],
+        ["Tue","Non-causal forward","Implement tiled QK, online softmax, and PV accumulation."],
+        ["Wed","Causal masking","Add causal tiles without corrupting normalization."],
+        ["Thu","Numerical tests","Compare outputs across sequence lengths, dtypes, and masks."],
+        ["Fri","Profile attention","Find whether each shape is bandwidth, occupancy, or compute limited."],
+        ["Sat","Benchmark story","Compare with PyTorch SDPA and FlashAttention on identical shapes."],
+        ["Sun","Paper hour","Revisit FA-2 with implementation context."]
+      ]},
+      {n:6,p:"kernels",t:"GQA, MQA & fused RoPE",g:"Expand attention to the variants used by modern serving systems.",tags:["GQA","MQA","RoPE"],days:[
+        ["Mon","MQA dataflow","Map many query heads onto shared K/V heads."],
+        ["Tue","GQA kernel","Implement grouped-query head mapping and shape validation."],
+        ["Wed","Fused RoPE","Fuse rotary embedding into the Q/K preparation path."],
+        ["Thu","Decode shapes","Optimize small-query, long-KV decode workloads."],
+        ["Fri","Correctness matrix","Test head ratios, odd sequence lengths, and dtype tolerances."],
+        ["Sat","API cleanup","Make attention variants consistent and benchmarkable."],
+        ["Sun","Paper hour","Read MQA and GQA papers."]
+      ]},
+      {n:7,p:"kernels",t:"The fusion showcase",g:"Turn three memory-bound passes into one compelling case study.",tags:["RMSNorm","SwiGLU","Fusion"],days:[
+        ["Mon","Baseline traces","Profile unfused residual + RMSNorm and identify HBM traffic."],
+        ["Tue","Fused RMSNorm","Implement residual add and normalization in one kernel."],
+        ["Wed","LayerNorm","Add mean subtraction and stable variance calculation."],
+        ["Thu","Fused SwiGLU","Fuse activation and gate multiplication."],
+        ["Fri","Roofline proof","Quantify bytes removed, achieved bandwidth, and latency change."],
+        ["Sat","Case study draft","Create before/after diagrams and an honest performance narrative."],
+        ["Sun","Recovery","Rest or read one fusion post."]
+      ]},
+      {n:8,p:"kernels",t:"Quantized matmul I: W8A8",g:"Build a SmoothQuant-style INT8 path with explicit accuracy checks.",tags:["INT8","SmoothQuant","Numerics"],days:[
+        ["Mon","Quantization math","Implement scales, zero points, and per-tensor/per-channel references."],
+        ["Tue","Activation smoothing","Reproduce the SmoothQuant transformation on a small model."],
+        ["Wed","W8A8 kernel","Implement INT8 GEMM with appropriate accumulation."],
+        ["Thu","Dequant epilogue","Fuse scaling and output conversion where possible."],
+        ["Fri","Accuracy/perf curve","Measure error and speed across calibration choices."],
+        ["Sat","Regression suite","Add tolerance budgets and pathological input tests."],
+        ["Sun","Paper hour","Read LLM.int8() and SmoothQuant."]
+      ]},
+      {n:9,p:"kernels",t:"Quantized matmul II: W4A16 & FP8",g:"Ship weight-only 4-bit and FP8 kernels with credible numerics.",tags:["W4A16","FP8","AWQ"],days:[
+        ["Mon","Weight packing","Define nibble layout and write pack/unpack references."],
+        ["Tue","W4A16 kernel","Dequantize inside the matmul path and reduce memory traffic."],
+        ["Wed","GPTQ/AWQ integration","Load representative scales and groups from quantized weights."],
+        ["Thu","FP8 path","Implement E4M3 inputs with FP32 accumulation."],
+        ["Fri","Numerical audit","Compare output error, saturation, and throughput by shape."],
+        ["Sat","Quantization report","Explain format tradeoffs in one benchmark table."],
+        ["Sun","Paper hour","Read GPTQ, AWQ, and FP8 format notes."]
+      ]},
+      {n:10,p:"kernels",t:"Hopper-native execution",g:"Use TMA/WGMMA or document a rigorous hardware-specific design.",tags:["Hopper","TMA","WGMMA"],days:[
+        ["Mon","H100 anatomy","Study Tensor Cores, TMA, warp groups, and asynchronous pipelines."],
+        ["Tue","FA-3 schedule","Trace warp specialization and producer/consumer roles."],
+        ["Wed","Prototype","Implement one TMA or WGMMA path via CuTe/ThunderKittens."],
+        ["Thu","Pipeline tuning","Vary stages and measure synchronization and occupancy costs."],
+        ["Fri","Compare generations","Explain what changes from Ampere to Hopper."],
+        ["Sat","NVFP4 design","Document a Blackwell block-scaled path; emulate if hardware is unavailable."],
+        ["Sun","Paper hour","Read FA-3 and Blackwell architecture material."]
+      ]},
+      {n:11,p:"kernels",t:"Paged & speculative attention",g:"Build the kernel bridge from the library into the serving engine.",tags:["PagedAttention","KV cache","EAGLE"],days:[
+        ["Mon","Block-table design","Specify logical-to-physical KV mapping and memory layout."],
+        ["Tue","Paged KV gather","Implement non-contiguous block loads for decode attention."],
+        ["Wed","Paged correctness","Test fragmentation, partial blocks, and boundary conditions."],
+        ["Thu","Tree attention","Implement verification masking for speculative token trees."],
+        ["Fri","Decode benchmark","Sweep batch, context, head dimension, and block size."],
+        ["Sat","Engine interface","Stabilize APIs the serving engine can call directly."],
+        ["Sun","Paper hour","Read PagedAttention and EAGLE."]
+      ]},
+      {n:12,p:"kernels",t:"Kernel library v1.0",g:"Release a polished, reproducible artifact and start an upstream PR.",tags:["Release","NCCL","OSS"],days:[
+        ["Mon","Communication study","Benchmark NCCL collectives or prototype a custom all-reduce."],
+        ["Tue","Repository audit","Standardize APIs, errors, build steps, and supported shapes."],
+        ["Wed","Benchmark freeze","Rerun every result under one controlled methodology."],
+        ["Thu","Documentation","Finish per-kernel READMEs, diagrams, and profiler evidence."],
+        ["Fri","Release v1.0","Tag the release and publish the flagship kernel essay."],
+        ["Sat","Upstream contribution","Open a focused issue or PR in FlashInfer, vLLM, or a related project."],
+        ["Sun","Milestone rest","Take the win, then reset."]
+      ]},
+      {n:13,p:"engine",t:"Engine skeleton: tokens out",g:"Load a model and generate correctly through your own runtime.",tags:["vLLM V1","Model runner","Decode"],days:[
+        ["Mon","Read the machine","Map vLLM V1 request flow from API to scheduler to worker."],
+        ["Tue","Model loader","Load weights, configs, tokenizer, and device allocations."],
+        ["Wed","Forward path","Wire embeddings, attention, MLP, norms, and LM head."],
+        ["Thu","Naive KV cache","Implement a contiguous baseline for prefill and decode."],
+        ["Fri","Greedy generation","Produce correct tokens end-to-end on one GPU."],
+        ["Sat","Architecture note","Draw the engine and list boundaries that will change."],
+        ["Sun","Recovery","Rest or watch the CS336 inference lecture."]
+      ]},
+      {n:14,p:"engine",t:"Paged KV block manager",g:"Replace contiguous memory with measured, low-waste paging.",tags:["Block manager","Copy-on-write","Memory"],days:[
+        ["Mon","Allocator contract","Define blocks, free lists, reference counts, and block tables."],
+        ["Tue","Allocate and free","Implement lifecycle operations with invariants."],
+        ["Wed","Paged kernel wiring","Connect the week-11 attention kernel to physical KV blocks."],
+        ["Thu","Copy-on-write","Share prompt blocks and split safely on divergence."],
+        ["Fri","Fragmentation test","Measure waste, churn, and peak memory under variable lengths."],
+        ["Sat","Failure testing","Hammer OOM, cancellation, and double-free scenarios."],
+        ["Sun","Paper hour","Revisit PagedAttention with your allocator in mind."]
+      ]},
+      {n:15,p:"engine",t:"Continuous batching",g:"Schedule at iteration granularity and prove the throughput gain.",tags:["Orca","Scheduler","Preemption"],days:[
+        ["Mon","Scheduler model","Define sequence states, token budgets, and iteration contracts."],
+        ["Tue","Admission","Add requests without waiting for the current batch to finish."],
+        ["Wed","Iteration scheduling","Mix active decode sequences each model step."],
+        ["Thu","Preemption","Swap or recompute when KV pressure exceeds capacity."],
+        ["Fri","Load generator","Compare static and continuous batching under arrivals."],
+        ["Sat","Queueing analysis","Plot throughput, TTFT, TBT, and tail latency."],
+        ["Sun","Paper hour","Read Orca."]
+      ]},
+      {n:16,p:"engine",t:"Chunked prefill & prefix reuse",g:"Balance long prompts with decode and reuse shared context.",tags:["Sarathi","RadixAttention","Prefix cache"],days:[
+        ["Mon","Prefill/decode conflict","Measure head-of-line blocking from long prompts."],
+        ["Tue","Chunked prefill","Split prompts across scheduler iterations with token budgets."],
+        ["Wed","Radix tree","Implement prefix insertion, lookup, and LRU eviction."],
+        ["Thu","KV ownership","Connect cached prefixes to block reference counting."],
+        ["Fri","Multi-turn workload","Measure TTFT and cache-hit benefit on shared-prefix traffic."],
+        ["Sat","Policy tuning","Explore chunk size and eviction thresholds."],
+        ["Sun","Paper hour","Read Sarathi-Serve and SGLang RadixAttention."]
+      ]},
+      {n:17,p:"engine",t:"Quantized serving, graphs & API",g:"Turn the engine into a fast, usable service.",tags:["CUDA Graphs","FastAPI","Streaming"],days:[
+        ["Mon","Quantized model path","Wire FP8 and W4A16 kernels into model layers."],
+        ["Tue","Static decode buckets","Design graph-friendly batch and sequence shapes."],
+        ["Wed","CUDA graphs","Capture and replay decode; handle padding and graph selection."],
+        ["Thu","OpenAI API","Implement chat completions and request validation."],
+        ["Fri","SSE streaming","Stream tokens, handle disconnects, and clean up state."],
+        ["Sat","First vLLM match","Run the first honest head-to-head benchmark."],
+        ["Sun","Recovery","Triage the largest gap, then stop."]
+      ]},
+      {n:18,p:"engine",t:"Speculative decoding",g:"Generate multiple candidate tokens and verify them correctly.",tags:["Draft model","Acceptance","EAGLE"],days:[
+        ["Mon","Correctness derivation","Understand rejection sampling and distribution preservation."],
+        ["Tue","Draft loop","Run a small draft model for multiple candidate tokens."],
+        ["Wed","Target verification","Verify candidates in one target-model pass."],
+        ["Thu","KV rollback","Commit accepted tokens and safely discard rejected branches."],
+        ["Fri","Acceptance study","Measure speedup against draft cost and acceptance rate."],
+        ["Sat","EAGLE exploration","Add an EAGLE path or a concrete design and prototype."],
+        ["Sun","Paper hour","Read EAGLE-2/3 and Medusa."]
+      ]},
+      {n:19,p:"engine",t:"Tensor parallel inference",g:"Shard the model over multiple GPUs and quantify scaling.",tags:["NCCL","Tensor parallel","NVLink"],days:[
+        ["Mon","Sharding plan","Map column/row parallel attention and MLP layers."],
+        ["Tue","Weight partitioning","Load only local tensor shards per rank."],
+        ["Wed","Collectives","Add all-reduce/all-gather at required boundaries."],
+        ["Thu","Distributed runner","Coordinate ranks, sampling, errors, and shutdown."],
+        ["Fri","TP=2 benchmark","Measure compute, communication, and memory behavior."],
+        ["Sat","Scaling report","Run TP=4 if available; explain efficiency losses."],
+        ["Sun","Paper hour","Read Megatron-LM parallelism sections."]
+      ]},
+      {n:20,p:"engine",t:"Engine v1.0 & benchmark report",g:"Freeze the artifact that tells your systems-performance story.",tags:["Goodput","TTFT/TBT","Release"],days:[
+        ["Mon","Stretch decision","Prototype disaggregation only if the core engine is already solid."],
+        ["Tue","Benchmark matrix","Fix models, lengths, concurrency, SLOs, hardware, and baselines."],
+        ["Wed","Load tests","Capture throughput, goodput, TTFT, TBT, p95, and p99."],
+        ["Thu","Correctness freeze","Run HF comparisons and numerical regression suites."],
+        ["Fri","Release v1.0","Tag the engine and publish architecture documentation."],
+        ["Sat","Benchmark essay","Explain where you win, lose, and what you would build next."],
+        ["Sun","Milestone rest","Step away from the profiler."]
+      ]},
+      {n:21,p:"launch",t:"Portfolio polish & open source",g:"Make both projects legible, reproducible, and visible.",tags:["Documentation","CI","Upstream PR"],days:[
+        ["Mon","Architecture docs","Create clean diagrams and rationale for both flagships."],
+        ["Tue","Reproducibility","Fix setup scripts, CI, configs, seeds, and benchmark commands."],
+        ["Wed","Upstream PR I","Submit a substantive kernel, profiling, or correctness improvement."],
+        ["Thu","Upstream PR II","Respond to review or open a second tightly scoped contribution."],
+        ["Fri","Flagship essay","Publish the serving-engine benchmark story."],
+        ["Sat","Portfolio pass","Rewrite READMEs around evidence, numbers, and technical decisions."],
+        ["Sun","Rest","No scope additions."]
+      ]},
+      {n:22,p:"launch",t:"Interview campaign",g:"Convert the work into crisp technical and behavioral performance.",tags:["Applications","System design","Mock loops"],days:[
+        ["Mon","Resume & applications","Frame both flagships around measured impact; apply with referrals first."],
+        ["Tue","Kernel drills","Time-box softmax, transpose, reduction, and FA-style coding."],
+        ["Wed","System design","Design Llama-405B serving, KV capacity, batching, and failure handling."],
+        ["Thu","Paper defense","Explain FA-3, PagedAttention, EAGLE, MLA, and DeepSeek tradeoffs."],
+        ["Fri","Mock loops","Run coding, system-design, and Anthropic-style optimization mocks."],
+        ["Sat","Project & values","Rehearse failures, tradeoffs, mission alignment, and ethical judgment."],
+        ["Sun","Rest","Enter the loops sharp, not exhausted."]
+      ]}
+    ];
+
+    const resources = {
+      cuda: ["CUDA Programming Guide", "https://docs.nvidia.com/cuda/cuda-c-programming-guide/"],
+      best: ["CUDA Best Practices", "https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/"],
+      nsight: ["Nsight Compute Guide", "https://docs.nvidia.com/nsight-compute/NsightCompute/index.html"],
+      roofline: ["NVIDIA Roofline Guide", "https://developer.nvidia.com/blog/accelerating-hpc-applications-with-nsight-compute-roofline-analysis/"],
+      gpumode: ["GPU MODE Lectures", "https://github.com/gpu-mode/lectures"],
+      cs336gpu: ["CS336: GPUs", "https://cs336.stanford.edu/"],
+      triton: ["Triton Tutorials", "https://triton-lang.org/main/getting-started/tutorials/index.html"],
+      tritonMatmul: ["Triton Matmul Tutorial", "https://triton-lang.org/main/getting-started/tutorials/03-matrix-multiplication.html"],
+      tritonSoftmax: ["Triton Softmax Tutorial", "https://triton-lang.org/main/getting-started/tutorials/02-fused-softmax.html"],
+      boehm: ["How to Optimize CUDA Matmul", "https://siboehm.com/articles/22/CUDA-MMM"],
+      cutlass: ["CUTLASS Documentation", "https://docs.nvidia.com/cutlass/"],
+      cute: ["CuTe DSL Guide", "https://docs.nvidia.com/cutlass/media/docs/pythonDSL/cute_dsl_general/dsl_introduction.html"],
+      fa1: ["FlashAttention Paper", "https://arxiv.org/abs/2205.14135"],
+      fa2: ["FlashAttention-2 Paper", "https://arxiv.org/abs/2307.08691"],
+      fa3: ["FlashAttention-3 Paper", "https://arxiv.org/abs/2407.08608"],
+      faRepo: ["FlashAttention Source", "https://github.com/Dao-AILab/flash-attention"],
+      mqa: ["MQA Paper", "https://arxiv.org/abs/1911.02150"],
+      gqa: ["GQA Paper", "https://arxiv.org/abs/2305.13245"],
+      rope: ["RoFormer / RoPE Paper", "https://arxiv.org/abs/2104.09864"],
+      rmsnorm: ["RMSNorm Paper", "https://arxiv.org/abs/1910.07467"],
+      swiglu: ["GLU Variants Paper", "https://arxiv.org/abs/2002.05202"],
+      quantGuide: ["PyTorch Quantization Guide", "https://docs.pytorch.org/ao/stable/quantization_overview.html"],
+      llmint8: ["LLM.int8() Paper", "https://arxiv.org/abs/2208.07339"],
+      smoothquant: ["SmoothQuant Paper", "https://arxiv.org/abs/2211.10438"],
+      gptq: ["GPTQ Paper", "https://arxiv.org/abs/2210.17323"],
+      awq: ["AWQ Paper", "https://arxiv.org/abs/2306.00978"],
+      fp8: ["FP8 Formats Paper", "https://arxiv.org/abs/2209.05433"],
+      hopper: ["Hopper Architecture", "https://resources.nvidia.com/en-us-tensor-core/nvidia-hopper-architecture-whitepaper"],
+      tma: ["CUDA TMA Programming", "https://docs.nvidia.com/cuda/cuda-c-programming-guide/#asynchronous-data-copies-using-the-tensor-memory-accelerator-tma"],
+      tk: ["ThunderKittens Source", "https://github.com/HazyResearch/ThunderKittens"],
+      blackwell: ["Blackwell Architecture", "https://resources.nvidia.com/en-us-blackwell-architecture"],
+      paged: ["PagedAttention Paper", "https://arxiv.org/abs/2309.06180"],
+      vllmBlog: ["vLLM PagedAttention Blog", "https://blog.vllm.ai/2023/06/20/vllm.html"],
+      vllmDocs: ["vLLM Documentation", "https://docs.vllm.ai/"],
+      vllmSource: ["vLLM Source", "https://github.com/vllm-project/vllm"],
+      eagle: ["EAGLE Paper", "https://arxiv.org/abs/2401.15077"],
+      eagle2: ["EAGLE-2 Paper", "https://arxiv.org/abs/2406.16858"],
+      medusa: ["Medusa Paper", "https://arxiv.org/abs/2401.10774"],
+      nccl: ["NCCL User Guide", "https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/"],
+      flashinfer: ["FlashInfer Source", "https://github.com/flashinfer-ai/flashinfer"],
+      cs336infer: ["CS336 Course & Inference Lecture", "https://cs336.stanford.edu/"],
+      hfGenerate: ["HF Generation Docs", "https://huggingface.co/docs/transformers/main/en/generation_strategies"],
+      orca: ["Orca Paper", "https://www.usenix.org/conference/osdi22/presentation/yu"],
+      sarathi: ["Sarathi-Serve Paper", "https://arxiv.org/abs/2403.02310"],
+      sglang: ["SGLang Paper", "https://arxiv.org/abs/2312.07104"],
+      sglangDocs: ["SGLang Documentation", "https://docs.sglang.io/"],
+      cudaGraphs: ["CUDA Graphs Guide", "https://docs.nvidia.com/cuda/cuda-c-programming-guide/#cuda-graphs"],
+      openaiApi: ["OpenAI API Reference", "https://platform.openai.com/docs/api-reference/chat"],
+      fastapi: ["FastAPI Documentation", "https://fastapi.tiangolo.com/"],
+      megatron: ["Megatron-LM Paper", "https://arxiv.org/abs/1909.08053"],
+      megatronRepo: ["Megatron-Core Docs", "https://docs.nvidia.com/megatron-core/developer-guide/latest/"],
+      distserve: ["DistServe Paper", "https://arxiv.org/abs/2401.09670"],
+      mooncake: ["Mooncake Paper", "https://arxiv.org/abs/2407.00079"],
+      benchmarking: ["vLLM Benchmarking Docs", "https://docs.vllm.ai/en/latest/contributing/benchmarks.html"],
+      githubActions: ["GitHub Actions Docs", "https://docs.github.com/en/actions"],
+      anthropicTakehome: ["Anthropic Performance Take-home", "https://github.com/anthropics/original_performance_takehome"],
+      systemDesign: ["HF LLM Inference Handbook", "https://huggingface.co/docs/text-generation-inference/en/conceptual/streaming"],
+      deepseek: ["DeepSeek-V3 Report", "https://arxiv.org/abs/2412.19437"],
+      mla: ["DeepSeek-V2 / MLA", "https://arxiv.org/abs/2405.04434"],
+      torchBench: ["PyTorch Benchmark Utils", "https://docs.pytorch.org/tutorials/recipes/recipes/benchmark.html"],
+      correctness: ["PyTorch Numerical Accuracy", "https://docs.pytorch.org/docs/stable/notes/numerical_accuracy.html"],
+      writing: ["Google Technical Writing", "https://developers.google.com/tech-writing"]
+    };
+
+    const weekDefaults = {
+      1: ["cuda", "gpumode", "cs336gpu"],
+      2: ["triton", "cs336gpu", "gpumode"],
+      3: ["boehm", "cuda", "best"],
+      4: ["tritonMatmul", "cutlass", "cute"],
+      5: ["fa1", "fa2", "faRepo"],
+      6: ["gqa", "mqa", "rope"],
+      7: ["rmsnorm", "swiglu", "triton"],
+      8: ["smoothquant", "llmint8", "quantGuide"],
+      9: ["awq", "gptq", "fp8"],
+      10: ["fa3", "hopper", "tma"],
+      11: ["paged", "eagle", "vllmBlog"],
+      12: ["flashinfer", "nccl", "writing"],
+      13: ["vllmSource", "cs336infer", "hfGenerate"],
+      14: ["paged", "vllmBlog", "vllmSource"],
+      15: ["orca", "vllmDocs", "benchmarking"],
+      16: ["sarathi", "sglang", "sglangDocs"],
+      17: ["cudaGraphs", "openaiApi", "fastapi"],
+      18: ["eagle2", "eagle", "medusa"],
+      19: ["megatron", "megatronRepo", "nccl"],
+      20: ["benchmarking", "distserve", "correctness"],
+      21: ["githubActions", "writing", "vllmSource"],
+      22: ["anthropicTakehome", "systemDesign", "deepseek"]
+    };
+
+    function refsFor(week, day) {
+      const text = day.join(" ").toLowerCase();
+      const refs = [];
+      const add = (...keys) => keys.forEach(key => {
+        if (resources[key] && !refs.some(ref => ref[1] === resources[key][1])) refs.push(resources[key]);
+      });
+
+      if (/nsight|profile|roofline|bottleneck|trace/.test(text)) add("nsight", "roofline");
+      if (/cuda|gpu execution|memory hierarchy|coalesc|shared memory|bank conflict|warp|reduction|transpose/.test(text)) add("cuda", "best");
+      if (/benchmark|throughput|latency|variance|shape sweep|load test|head-to-head|goodput|ttft|tbt/.test(text)) add("torchBench", "benchmarking");
+      if (/triton|softmax/.test(text)) add("tritonSoftmax", "triton");
+      if (/gemm|matmul|register blocking|vectorized|tiling|double buffering/.test(text)) add("boehm", "tritonMatmul");
+      if (/cutlass/.test(text)) add("cutlass", "cute");
+      if (/cute/.test(text)) add("cute", "cutlass");
+      if (/flashattention-3|fa-3|hopper-native|warp specialization/.test(text)) add("fa3", "hopper");
+      else if (/flashattention-2|fa-2/.test(text)) add("fa2", "faRepo");
+      else if (/flashattention|online softmax|attention forward|sdpa/.test(text)) add("fa1", "faRepo");
+      if (/mqa/.test(text)) add("mqa", "gqa");
+      if (/gqa|grouped-query/.test(text)) add("gqa", "mqa");
+      if (/rope|rotary/.test(text)) add("rope", "faRepo");
+      if (/rmsnorm|layernorm/.test(text)) add("rmsnorm", "triton");
+      if (/swiglu|activation|gate multiplication/.test(text)) add("swiglu", "triton");
+      if (/smoothquant|w8a8|int8|activation smoothing/.test(text)) add("smoothquant", "llmint8", "quantGuide");
+      if (/gptq/.test(text)) add("gptq", "awq");
+      if (/awq|w4a16|4-bit|weight packing|nibble/.test(text)) add("awq", "gptq");
+      if (/fp8|e4m3/.test(text)) add("fp8", "hopper");
+      if (/hopper|h100|tma|wgmma|tensor core/.test(text)) add("hopper", "tma");
+      if (/thunderkittens/.test(text)) add("tk", "fa3");
+      if (/blackwell|nvfp4/.test(text)) add("blackwell", "fp8");
+      if (/paged|block table|block manager|fragmentation|copy-on-write|kv block|kv cache/.test(text)) add("paged", "vllmBlog");
+      if (/eagle/.test(text)) add("eagle2", "eagle");
+      if (/medusa|speculative|draft model|acceptance|verification|rejection sampling/.test(text)) add("eagle", "medusa");
+      if (/nccl|all-reduce|all-gather|collective|nvlink/.test(text)) add("nccl", "megatron");
+      if (/vllm|engine skeleton|model runner/.test(text)) add("vllmDocs", "vllmSource");
+      if (/model loader|generation|greedy/.test(text)) add("hfGenerate", "cs336infer");
+      if (/continuous batching|iteration scheduling|admission|preemption|orca/.test(text)) add("orca", "vllmDocs");
+      if (/chunked prefill|sarathi|head-of-line/.test(text)) add("sarathi", "vllmDocs");
+      if (/radix|prefix cache|prefix reuse/.test(text)) add("sglang", "sglangDocs");
+      if (/cuda graph|graph-friendly|capture and replay/.test(text)) add("cudaGraphs", "vllmDocs");
+      if (/openai api|chat completions|sse|streaming|fastapi/.test(text)) add("openaiApi", "fastapi");
+      if (/tensor parallel|sharding|weight partition|distributed runner|tp=/.test(text)) add("megatron", "megatronRepo");
+      if (/disaggregat/.test(text)) add("distserve", "mooncake");
+      if (/correctness|numerical|tolerance|regression|accuracy|pathological/.test(text)) add("correctness", "quantGuide");
+      if (/ci|github actions|reproducibility/.test(text)) add("githubActions", "writing");
+      if (/documentation|readme|write-up|essay|report|publish|field notes|architecture note/.test(text)) add("writing", "gpumode");
+      if (/anthropic|optimization mock|take-home/.test(text)) add("anthropicTakehome", "gpumode");
+      if (/system design|llama-405b|capacity|failure handling/.test(text)) add("systemDesign", "vllmDocs");
+      if (/deepseek/.test(text)) add("deepseek", "mla");
+      if (/mla/.test(text)) add("mla", "deepseek");
+      if (/paper hour/.test(text) && refs.length === 0) add(...weekDefaults[week.n]);
+      add(...weekDefaults[week.n]);
+      return refs.slice(0, 3);
+    }
+
+    function renderRefs(week, day) {
+      return `<div class="refs" aria-label="Learning references">${refsFor(week, day).map(([label, url]) =>
+        `<a class="ref-link" href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`
+      ).join("")}</div>`;
+    }
+
+    const root = document.getElementById("roadmapRoot");
+    const completed = new Set(JSON.parse(localStorage.getItem("inference-plan-progress") || "[]"));
+    let activeFilter = "all";
+
+    function render() {
+      root.innerHTML = "";
+      Object.entries(phases).forEach(([key, phase]) => {
+        const section = document.createElement("section");
+        section.className = "phase";
+        section.dataset.phase = key;
+        section.style.setProperty("--phase-color", phase.color);
+        section.innerHTML = `<div class="phase-head"><span class="phase-index">${phase.index}</span><h3 class="phase-title">${phase.title}</h3><span class="phase-weeks">${phase.weeks}</span></div><div class="week-grid"></div>`;
+        const grid = section.querySelector(".week-grid");
+        weeks.filter(w => w.p === key).forEach(w => {
+          const card = document.createElement("article");
+          card.className = "week-card" + (completed.has(w.n) ? " done" : "");
+          card.dataset.phase = w.p;
+          card.dataset.search = `${w.t} ${w.g} ${w.tags.join(" ")} ${w.days.flat().join(" ")}`.toLowerCase();
+          card.innerHTML = `
+            <div class="week-top" role="button" tabindex="0" aria-expanded="false">
+              <span class="week-no">${String(w.n).padStart(2,"0")}</span>
+              <div><h4 class="week-title">${w.t}</h4><p class="week-goal">${w.g}</p></div>
+              <button class="week-toggle" aria-label="Expand week ${w.n}">+</button>
+            </div>
+            <div class="week-meta">${w.tags.map(t=>`<span class="tag">${t}</span>`).join("")}<label class="complete-label"><input type="checkbox" ${completed.has(w.n)?"checked":""}> complete</label></div>
+            <div class="days">${w.days.map(d=>`<div class="day"><span class="day-name">${d[0]}</span><div><strong>${d[1]}</strong><p>${d[2]}</p>${renderRefs(w, d)}</div></div>`).join("")}</div>`;
+          const top = card.querySelector(".week-top");
+          const toggle = () => {
+            card.classList.toggle("open");
+            top.setAttribute("aria-expanded", card.classList.contains("open"));
+          };
+          top.addEventListener("click", e => { if (!e.target.closest("input")) toggle(); });
+          top.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+          card.querySelector("input").addEventListener("change", e => {
+            e.stopPropagation();
+            e.target.checked ? completed.add(w.n) : completed.delete(w.n);
+            card.classList.toggle("done", e.target.checked);
+            localStorage.setItem("inference-plan-progress", JSON.stringify([...completed]));
+            updateProgress();
+          });
+          grid.appendChild(card);
+        });
+        root.appendChild(section);
+      });
+      applyFilters();
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const pct = Math.round(completed.size / weeks.length * 100);
+      document.getElementById("progressText").textContent = pct + "%";
+      document.getElementById("progressFill").style.width = pct + "%";
+    }
+
+    function applyFilters() {
+      const query = document.getElementById("search").value.trim().toLowerCase();
+      let visible = 0;
+      document.querySelectorAll(".week-card").forEach(card => {
+        const show = (activeFilter === "all" || card.dataset.phase === activeFilter) && (!query || card.dataset.search.includes(query));
+        card.classList.toggle("hidden", !show);
+        if (show) visible++;
+      });
+      document.querySelectorAll(".phase").forEach(section => {
+        section.style.display = section.querySelectorAll(".week-card:not(.hidden)").length ? "" : "none";
+      });
+      document.getElementById("empty").style.display = visible ? "none" : "block";
+    }
+
+    document.querySelectorAll("[data-filter]").forEach(btn => btn.addEventListener("click", () => {
+      activeFilter = btn.dataset.filter;
+      document.querySelectorAll(".filter").forEach(b => b.classList.toggle("active", b.dataset.filter === activeFilter));
+      applyFilters();
+      if (!btn.classList.contains("filter")) document.getElementById("roadmap").scrollIntoView({behavior:"smooth"});
+    }));
+    document.querySelector("[data-jump='roadmap']").addEventListener("click", () => document.getElementById("roadmap").scrollIntoView({behavior:"smooth"}));
+    document.getElementById("search").addEventListener("input", applyFilters);
+    render();
+  </script>
+</body>
+</html>

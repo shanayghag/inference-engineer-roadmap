@@ -1,7 +1,7 @@
 # Inference Engineer Roadmap
 
-An interactive 22-week battle plan for developing production-grade GPU kernel
-and LLM inference engineering skills.
+An interactive 26-week execution plan for developing production-grade model,
+GPU kernel, and LLM inference engineering skills.
 
 ## Live site
 

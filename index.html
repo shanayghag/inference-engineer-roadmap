@@ -169,7 +169,7 @@
       color: var(--muted);
       font: italic 17px/1.45 var(--serif);
     }
-    .week-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 18px; }
+    .week-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 18px; margin-top: 18px; }
     .week-card {
       border: 1.5px solid var(--ink);
       background: rgba(249,247,239,.9);
@@ -431,7 +431,7 @@
             "p": "model",
             "date": "Aug 3–9",
             "t": "Baseline, tokenizer, resource accounting",
-            "g": "tag w01; plan next experiment.",
+            "g": "Publish: The inference engineer’s cost model",
             "tags": [
                   "tokenizer",
                   "cost model",
@@ -471,7 +471,7 @@
                   [
                         "Sun",
                         "Publish Blog 1: “The inference engineer’s cost model”",
-                        "tag w01; plan next experiment."
+                        "Plan next experiment."
                   ]
             ]
       },
@@ -480,7 +480,7 @@
             "p": "model",
             "date": "Aug 10–16",
             "t": "Decoder-only Transformer from scratch",
-            "g": "tag w02.",
+            "g": "Publish: A modern decoder block, tensor by tensor",
             "tags": [
                   "tokenizer",
                   "cost model",
@@ -520,7 +520,7 @@
                   [
                         "Sun",
                         "Publish Blog 2: “A modern decoder block, tensor by tensor”",
-                        "tag w02."
+                        "."
                   ]
             ]
       },
@@ -529,7 +529,7 @@
             "p": "model",
             "date": "Aug 17–23",
             "t": "Training system and evaluation",
-            "g": "tag w03.",
+            "g": "Publish: Training a tiny LM without fooling yourself",
             "tags": [
                   "cost model",
                   "Transformer",
@@ -569,7 +569,7 @@
                   [
                         "Sun",
                         "Publish Blog 3: “Training a tiny LM without fooling yourself”",
-                        "tag w03."
+                        "."
                   ]
             ]
       },
@@ -578,7 +578,7 @@
             "p": "model",
             "date": "Aug 24–30",
             "t": "Attention variants I: MHA → MQA → GQA → MLA",
-            "g": "tag w04.",
+            "g": "Publish: MHA, MQA, GQA, MLA: compression across heads",
             "tags": [
                   "tokenizer",
                   "cost model",
@@ -618,7 +618,7 @@
                   [
                         "Sun",
                         "Publish Blog 4: “MHA, MQA, GQA, MLA: compression across heads”",
-                        "tag w04."
+                        "."
                   ]
             ]
       },
@@ -627,7 +627,7 @@
             "p": "sequence",
             "date": "Aug 31–Sep 6",
             "t": "Sparse, sliding-window, and learned selection",
-            "g": "tag w05.",
+            "g": "Publish: Sparse attention: patterns, hardware, and retraining",
             "tags": [
                   "cost model",
                   "Transformer",
@@ -667,7 +667,7 @@
                   [
                         "Sun",
                         "Publish Blog 5: “Sparse attention: patterns, hardware, and retraining”",
-                        "tag w05."
+                        "."
                   ]
             ]
       },
@@ -676,7 +676,7 @@
             "p": "sequence",
             "date": "Sep 7–13",
             "t": "SSM mathematics and Mamba",
-            "g": "tag w06.",
+            "g": "Publish: From SSMs to selective scan",
             "tags": [
                   "Transformer",
                   "Mamba",
@@ -716,7 +716,7 @@
                   [
                         "Sun",
                         "Publish Blog 6: “From SSMs to selective scan”",
-                        "tag w06."
+                        "."
                   ]
             ]
       },
@@ -725,7 +725,7 @@
             "p": "sequence",
             "date": "Sep 14–20",
             "t": "Mamba-2, Jamba, and modern hybrids",
-            "g": "tag w07.",
+            "g": "Publish: Why hybrid architectures keep attention",
             "tags": [
                   "tokenizer",
                   "cost model",
@@ -765,7 +765,7 @@
                   [
                         "Sun",
                         "Publish Blog 7: “Why hybrid architectures keep attention”",
-                        "tag w07."
+                        "."
                   ]
             ]
       },
@@ -774,7 +774,7 @@
             "p": "sequence",
             "date": "Sep 21–27",
             "t": "CPU parallelism, GPU anatomy, roofline",
-            "g": "tag w08.",
+            "g": "Publish: Roofline analysis for LLM inference",
             "tags": [
                   "cost model",
                   "Transformer",
@@ -814,7 +814,7 @@
                   [
                         "Sun",
                         "Publish flagship Blog 8: “Roofline analysis for LLM inference”",
-                        "tag w08."
+                        "."
                   ]
             ]
       },
@@ -823,7 +823,7 @@
             "p": "cuda",
             "date": "Sep 28–Oct 4",
             "t": "CUDA programming model",
-            "g": "tag w09.",
+            "g": "Publish: CUDA’s execution model through experiments",
             "tags": [
                   "cost model",
                   "Sparse",
@@ -863,7 +863,7 @@
                   [
                         "Sun",
                         "Publish Blog 9: “CUDA’s execution model through experiments”",
-                        "tag w09."
+                        "."
                   ]
             ]
       },
@@ -872,7 +872,7 @@
             "p": "cuda",
             "date": "Oct 5–11",
             "t": "Memory hierarchy and transpose ladder",
-            "g": "tag w10.",
+            "g": "Publish: Memory coalescing and bank conflicts you can measure",
             "tags": [
                   "cost model",
                   "Roofline",
@@ -912,7 +912,7 @@
                   [
                         "Sun",
                         "Publish Blog 10: “Memory coalescing and bank conflicts you can measure”",
-                        "tag w10."
+                        "."
                   ]
             ]
       },
@@ -921,7 +921,7 @@
             "p": "cuda",
             "date": "Oct 12–18",
             "t": "Kernel workshop Week 1 + GEMM I",
-            "g": "tag w11.",
+            "g": "Publish: GEMM 1%→shared-memory tiling",
             "tags": [
                   "cost model",
                   "Roofline",
@@ -961,7 +961,7 @@
                   [
                         "Sun",
                         "Publish Blog 11: “GEMM 1%→shared-memory tiling”",
-                        "tag w11."
+                        "."
                   ]
             ]
       },
@@ -970,7 +970,7 @@
             "p": "cuda",
             "date": "Oct 19–25",
             "t": "Kernel workshop Week 2 + GEMM II",
-            "g": "tag w12.",
+            "g": "Publish: Registers, vector loads, and warp tiling",
             "tags": [
                   "cost model",
                   "GEMM",
@@ -1010,7 +1010,7 @@
                   [
                         "Sun",
                         "Publish Blog 12: “Registers, vector loads, and warp tiling”",
-                        "tag w12."
+                        "."
                   ]
             ]
       },
@@ -1068,7 +1068,7 @@
             "p": "triton",
             "date": "Nov 2–8",
             "t": "Kernel workshop Week 4 + Triton foundations",
-            "g": "tag w14.",
+            "g": "Publish: Thinking in Triton programs, not CUDA threads",
             "tags": [
                   "cost model",
                   "Transformer",
@@ -1108,7 +1108,7 @@
                   [
                         "Sun",
                         "Publish Blog 14: “Thinking in Triton programs, not CUDA threads”",
-                        "tag w14."
+                        "."
                   ]
             ]
       },
@@ -1117,7 +1117,7 @@
             "p": "triton",
             "date": "Nov 9–15",
             "t": "Workshop Week 5 + profiling/debugging",
-            "g": "tag w15.",
+            "g": "Publish: A profiler-first GPU debugging playbook",
             "tags": [
                   "cost model",
                   "Evaluation",
@@ -1157,7 +1157,7 @@
                   [
                         "Sun",
                         "Publish Blog 15: “A profiler-first GPU debugging playbook”",
-                        "tag w15."
+                        "."
                   ]
             ]
       },
@@ -1166,7 +1166,7 @@
             "p": "triton",
             "date": "Nov 16–22",
             "t": "Workshop Week 6 + FlashAttention-1",
-            "g": "tag w16.",
+            "g": "Publish: FlashAttention from online softmax to tiled kernel",
             "tags": [
                   "Transformer",
                   "MHA→MLA",
@@ -1206,7 +1206,7 @@
                   [
                         "Sun",
                         "Publish Blog 16: “FlashAttention from online softmax to tiled kernel”",
-                        "tag w16."
+                        "."
                   ]
             ]
       },
@@ -1215,7 +1215,7 @@
             "p": "triton",
             "date": "Nov 23–29",
             "t": "Workshop Week 7 + FA2/FA3 and Hopper",
-            "g": "tag w17.",
+            "g": "Publish: FA1 to FA3: same attention, different schedules",
             "tags": [
                   "Transformer",
                   "GEMM",
@@ -1255,7 +1255,7 @@
                   [
                         "Sun",
                         "Publish Blog 17: “FA1 to FA3: same attention, different schedules”",
-                        "tag w17."
+                        "."
                   ]
             ]
       },
@@ -1264,7 +1264,7 @@
             "p": "triton",
             "date": "Nov 30–Dec 6",
             "t": "Workshop Week 8 + CUTLASS/CuTe/Blackwell",
-            "g": "tag w18.",
+            "g": "Publish: From CUDA to CuTe DSL—and what Blackwell changes",
             "tags": [
                   "cost model",
                   "CUDA",
@@ -1304,7 +1304,7 @@
                   [
                         "Sun",
                         "Publish Blog 18: “From CUDA to CuTe DSL—and what Blackwell changes”",
-                        "tag w18."
+                        "."
                   ]
             ]
       },
@@ -1313,7 +1313,7 @@
             "p": "triton",
             "date": "Dec 7–13",
             "t": "Workshop close + DeepSeek and AI-written kernels",
-            "g": "tag w19.",
+            "g": "Publish: DeepSeek kernels and the agent–profiler loop",
             "tags": [
                   "Evaluation",
                   "MHA→MLA",
@@ -1353,7 +1353,7 @@
                   [
                         "Sun",
                         "Publish flagship Blog 19: “DeepSeek kernels and the agent–profiler loop”",
-                        "tag w19."
+                        "."
                   ]
             ]
       },
@@ -1362,7 +1362,7 @@
             "p": "engine",
             "date": "Dec 14–20",
             "t": "Inference anatomy, KV cache, batching",
-            "g": "tag w20.",
+            "g": "Publish: Prefill, decode, and continuous batching from scratch",
             "tags": [
                   "cost model",
                   "KV cache",
@@ -1402,7 +1402,7 @@
                   [
                         "Sun",
                         "Publish Blog 20: “Prefill, decode, and continuous batching from scratch”",
-                        "tag w20."
+                        "."
                   ]
             ]
       },
@@ -1411,7 +1411,7 @@
             "p": "engine",
             "date": "Dec 21–27",
             "t": "PagedAttention and prefix/Radix caching",
-            "g": "tag w21.",
+            "g": "Publish: PagedAttention and RadixAttention as memory systems",
             "tags": [
                   "cost model",
                   "Transformer",
@@ -1451,7 +1451,7 @@
                   [
                         "Sun",
                         "Publish Blog 21: “PagedAttention and RadixAttention as memory systems”",
-                        "tag w21."
+                        "."
                   ]
             ]
       },
@@ -1460,7 +1460,7 @@
             "p": "engine",
             "date": "Dec 28–Jan 3",
             "t": "Quantization and speculative decoding",
-            "g": "tag w22.",
+            "g": "Publish: Quantization and speculative decoding: two different bottlenecks",
             "tags": [
                   "cost model",
                   "Batching",
@@ -1500,7 +1500,7 @@
                   [
                         "Sun",
                         "Publish Blog 22: “Quantization and speculative decoding: two different bottlenecks”",
-                        "tag w22."
+                        "."
                   ]
             ]
       },
@@ -1509,7 +1509,7 @@
             "p": "engine",
             "date": "Jan 4–10",
             "t": "Production server, SGLang/vLLM/TensorRT-LLM comparison",
-            "g": "tag w23.",
+            "g": "Publish: Anatomy of a production LLM inference server",
             "tags": [
                   "tokenizer",
                   "KV cache",
@@ -1549,7 +1549,7 @@
                   [
                         "Sun",
                         "Publish Blog 23: “Anatomy of a production LLM inference server”",
-                        "tag w23."
+                        "."
                   ]
             ]
       },
@@ -1558,7 +1558,7 @@
             "p": "launch",
             "date": "Jan 11–17",
             "t": "5D parallelism revision and implementation",
-            "g": "tag w24.",
+            "g": "Publish: Choosing five dimensions of parallelism",
             "tags": [
                   "cost model",
                   "Transformer",
@@ -1598,7 +1598,7 @@
                   [
                         "Sun",
                         "Publish Blog 24: “Choosing five dimensions of parallelism”",
-                        "tag w24."
+                        "."
                   ]
             ]
       },

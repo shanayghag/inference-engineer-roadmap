@@ -920,48 +920,48 @@
             "n": 11,
             "p": "cuda",
             "date": "Oct 12–18",
-            "t": "Kernel workshop Week 1 + GEMM I",
+            "t": "GEMM self-study I: naive mapping + tiling",
             "g": "Publish: GEMM 1%→shared-memory tiling",
             "tags": [
-                  "cost model",
-                  "Roofline",
-                  "Memory"
+                  "GEMM",
+                  "CUTLASS model",
+                  "Tiling"
             ],
             "days": [
                   [
                         "Mon",
-                        "Attend/review workshop session 1",
-                        "consolidate CPU parallelism/roofline notes; predict GEMM bottleneck."
+                        "GEMM as a data-reuse problem",
+                        "Study PMPP tiled matmul, the CUTLASS GEMM model, and Simon Boehm; predict the naive bottleneck before coding."
                   ],
                   [
                         "Tue",
-                        "Implement naive GEMM",
-                        "test shapes, transposes, odd sizes; establish cuBLAS baseline."
+                        "Naive GEMM baseline",
+                        "Implement one-thread-per-output GEMM; test shapes, transposes, odd sizes; establish cuBLAS baseline."
                   ],
                   [
                         "Wed",
-                        "Workshop session 2",
-                        "implement coalesced global-memory GEMM; profile."
+                        "Coalesced global-memory GEMM",
+                        "Change thread/data mapping for coalesced access; profile global load/store efficiency."
                   ],
                   [
                         "Thu",
-                        "Implement shared-memory tiling",
-                        "sweep tile sizes and explain failures."
+                        "Shared-memory tiling",
+                        "Stage A/B tiles in shared memory; sweep tile sizes and explain failures."
                   ],
                   [
                         "Fri",
-                        "Workshop session 3",
-                        "reconcile lecture measurements with your hardware."
+                        "Measure the reuse story",
+                        "Record FLOPs, global loads, arithmetic intensity, occupancy, registers, and shared memory per version."
                   ],
                   [
                         "Sat",
                         "GEMM versions 1–4",
-                        "benchmark square/tall/skinny cases, FP32/FP16 where valid."
+                        "Benchmark square/tall/skinny cases, FP32/FP16 where valid; compare against Boehm without copying."
                   ],
                   [
                         "Sun",
                         "Publish Blog 11: “GEMM 1%→shared-memory tiling”",
-                        "."
+                        "Commit the worklog, benchmark table, Nsight screenshots, and next bottleneck hypothesis."
                   ]
             ]
       },
@@ -969,48 +969,48 @@
             "n": 12,
             "p": "cuda",
             "date": "Oct 19–25",
-            "t": "Kernel workshop Week 2 + GEMM II",
+            "t": "GEMM self-study II: registers, vector loads, warp tiling",
             "g": "Publish: Registers, vector loads, and warp tiling",
             "tags": [
-                  "cost model",
                   "GEMM",
-                  "Write"
+                  "Registers",
+                  "Autotune"
             ],
             "days": [
                   [
                         "Mon",
-                        "Workshop session 4",
-                        "implement register tiling and thread coarsening."
+                        "Register tiling hierarchy",
+                        "Study CUTLASS efficient GEMM and Boehm register tiling; implement 1D register blocking."
                   ],
                   [
                         "Tue",
-                        "Add vectorized loads where alignment permits",
-                        "prove safe fallback for ragged dimensions."
+                        "2D thread tiles",
+                        "Add 2D register blocking; measure register pressure, occupancy, instruction mix, and throughput."
                   ],
                   [
                         "Wed",
-                        "Workshop session 5",
-                        "study warp tiling; implement next GEMM version."
+                        "Vectorized loads",
+                        "Experiment with float4/vectorized loads where alignment permits; prove safe fallback for ragged dimensions."
                   ],
                   [
                         "Thu",
-                        "Autotune tile/block parameters",
-                        "prevent benchmark overfitting with held-out shapes."
+                        "Warp tiling",
+                        "Study warp-level work decomposition; implement the next GEMM version and compare instruction mix."
                   ],
                   [
                         "Fri",
-                        "Workshop session 6",
-                        "profile stalls, occupancy, instruction mix, and memory."
+                        "Autotuning without fooling yourself",
+                        "Sweep BLOCK_M/N/K and thread-tile sizes; hold out shapes to prevent benchmark overfitting."
                   ],
                   [
                         "Sat",
-                        "Push GEMM toward cuBLAS on one target shape",
-                        "write honest results across diverse shapes."
+                        "Push one target shape",
+                        "Push GEMM toward cuBLAS on one target shape while writing honest results across diverse shapes."
                   ],
                   [
                         "Sun",
                         "Publish Blog 12: “Registers, vector loads, and warp tiling”",
-                        "."
+                        "Commit the tuned variants, failed configs, and the resource-limit explanation."
                   ]
             ]
       },
@@ -1018,48 +1018,48 @@
             "n": 13,
             "p": "cuda",
             "date": "Oct 26–Nov 1",
-            "t": "Kernel workshop Week 3 + tensor cores",
+            "t": "Tensor cores, WMMA, profiling, and PTX/SASS",
             "g": "Publish: Naive CUDA to tensor cores: the complete GEMM worklog",
             "tags": [
-                  "Evaluation",
-                  "CUDA",
-                  "Memory"
+                  "Tensor Cores",
+                  "Nsight",
+                  "PTX/SASS"
             ],
             "days": [
                   [
                         "Mon",
-                        "Workshop session 7",
-                        "study tensor-core data paths, WMMA fragments, accumulator precision."
+                        "Tensor-core architecture",
+                        "Study WMMA, MMA D=A×B+C, fragments, accumulator precision, alignment, and dtype constraints."
                   ],
                   [
                         "Tue",
-                        "Implement minimal WMMA GEMM",
-                        "compare FP16/BF16/TF32 error and throughput."
+                        "Minimal WMMA GEMM",
+                        "Implement WMMA GEMM; compare FP16/BF16/TF32 error and throughput against CUDA-core GEMM and cuBLAS."
                   ],
                   [
                         "Wed",
-                        "Workshop session 8",
-                        "debug layouts and alignment; inspect tensor-core utilization."
+                        "Profile like a performance engineer",
+                        "Profile memory-bound, compute-heavy, and poor-occupancy kernels; write a one-page diagnosis for each."
                   ],
                   [
                         "Thu",
-                        "Add padding/ragged handling and epilogue",
-                        "compare against cuBLAS across shapes."
+                        "Padding, ragged handling, epilogue",
+                        "Add practical shape handling and epilogue; compare against cuBLAS across non-ideal shapes."
                   ],
                   [
                         "Fri",
-                        "Workshop session 9",
-                        "consolidate transpose/GEMM worklog and unresolved profiler findings."
+                        "Debugging + PTX/SASS",
+                        "Use Compute Sanitizer, cuobjdump/nvdisasm, and NVCC PTX output to find a correctness bug and a performance regression."
                   ],
                   [
                         "Sat",
-                        "Release GPU Kernel Worklog v0.1 with reproducible",
-                        "Release GPU Kernel Worklog v0.1 with reproducible scripts and Nsight reports."
+                        "GPU Kernel Worklog v0.1",
+                        "Release transpose/GEMM/tensor-core work with reproducible scripts, Nsight reports, and unresolved profiler findings."
                   ],
                   [
                         "Sun",
-                        "Publish flagship Blog 13: “Naive CUDA to",
-                        "Publish flagship Blog 13: “Naive CUDA to tensor cores: the complete GEMM worklog”."
+                        "Publish flagship Blog 13: “Naive CUDA to tensor cores: the complete GEMM worklog”",
+                        "Explain the whole ladder from bandwidth waste to tensor-core constraints."
                   ]
             ]
       },
@@ -1067,48 +1067,48 @@
             "n": 14,
             "p": "triton",
             "date": "Nov 2–8",
-            "t": "Kernel workshop Week 4 + Triton foundations",
+            "t": "Triton foundations self-study",
             "g": "Publish: Thinking in Triton programs, not CUDA threads",
             "tags": [
-                  "cost model",
-                  "Transformer",
-                  "CUDA"
+                  "Triton",
+                  "Fused ops",
+                  "Portability"
             ],
             "days": [
                   [
                         "Mon",
-                        "Workshop session 10",
-                        "Triton vector add; understand programs, blocks, masks, strides."
+                        "Triton vector add",
+                        "Study Triton programs, blocks, masks, strides, and the language API; reimplement vector add from a blank file."
                   ],
                   [
                         "Tue",
                         "Triton fused softmax",
-                        "derive memory traffic saved by fusion; benchmark fairly."
+                        "Derive memory traffic saved by fusion; benchmark fairly against PyTorch and CUDA."
                   ],
                   [
                         "Wed",
-                        "Workshop session 11",
-                        "Triton matmul; study block pointers and autotuning."
+                        "Triton matmul",
+                        "Study block pointers, pointer arithmetic, L2-aware ordering, and autotuning; implement matmul."
                   ],
                   [
                         "Thu",
-                        "Implement layer norm and one fused Transformer op",
-                        "gradient tests if backward included."
+                        "LayerNorm and fused Transformer op",
+                        "Implement layer norm and one fused Transformer op; add gradient tests if backward is included."
                   ],
                   [
                         "Fri",
-                        "Workshop session 12",
-                        "compare CUDA vs Triton source, compilation, portability, and speed."
+                        "CUDA vs Triton comparison",
+                        "Compare source complexity, compilation, portability, profiler output, and speed across matching shapes."
                   ],
                   [
                         "Sat",
-                        "Reimplement three Triton tutorial kernels from blank files",
-                        "profile and document."
+                        "Three blank-file kernels",
+                        "Reimplement three Triton tutorial kernels from memory; profile and document each bottleneck."
                   ],
                   [
                         "Sun",
                         "Publish Blog 14: “Thinking in Triton programs, not CUDA threads”",
-                        "."
+                        "Commit kernels, benchmark commands, and a Triton mental-model note."
                   ]
             ]
       },
@@ -1116,48 +1116,48 @@
             "n": 15,
             "p": "triton",
             "date": "Nov 9–15",
-            "t": "Workshop Week 5 + profiling/debugging",
+            "t": "Profiler-first debugging and kernel triage",
             "g": "Publish: A profiler-first GPU debugging playbook",
             "tags": [
-                  "cost model",
-                  "Evaluation",
-                  "Debugging"
+                  "Debugging",
+                  "Nsight",
+                  "Compute Sanitizer"
             ],
             "days": [
                   [
                         "Mon",
-                        "Workshop session 13",
-                        "create three intentionally sabotaged kernels and a triage checklist."
+                        "Sabotaged kernels",
+                        "Create three intentionally broken kernels: race, out-of-bounds, and performance regression."
                   ],
                   [
                         "Tue",
-                        "Debug race/out-of-bounds/numerical failures with Compute Sanitizer and",
-                        "Debug race/out-of-bounds/numerical failures with Compute Sanitizer and minimal repros."
+                        "Correctness debugging",
+                        "Use Compute Sanitizer and minimal repros to isolate race/out-of-bounds/numerical failures."
                   ],
                   [
                         "Wed",
-                        "Workshop session 14",
-                        "identify memory, compute, latency, occupancy, and launch-bound cases in Nsight."
+                        "Nsight diagnosis taxonomy",
+                        "Identify memory, compute, latency, occupancy, launch-bound, and spill-bound cases in Nsight."
                   ],
                   [
                         "Thu",
-                        "Use baselines and metric deltas",
-                        "practice diagnosis without source changes first."
+                        "Metric deltas before edits",
+                        "Practice diagnosis using baselines and metric deltas before changing source code."
                   ],
                   [
                         "Fri",
-                        "Workshop session 15",
-                        "profile tiny LM end-to-end with Nsight Systems then descend into one kernel."
+                        "Tiny LM end-to-end trace",
+                        "Profile tiny LM with Nsight Systems, then descend into one kernel with Nsight Compute."
                   ],
                   [
                         "Sat",
                         "Timed debugging drill",
-                        "produce incident-style reports for three kernels."
+                        "Produce incident-style reports for three kernels with root cause, evidence, fix, and regression test."
                   ],
                   [
                         "Sun",
                         "Publish Blog 15: “A profiler-first GPU debugging playbook”",
-                        "."
+                        "Commit the triage checklist and repaired kernels."
                   ]
             ]
       },
@@ -1165,48 +1165,48 @@
             "n": 16,
             "p": "triton",
             "date": "Nov 16–22",
-            "t": "Workshop Week 6 + FlashAttention-1",
+            "t": "Attention, online softmax, and FlashAttention-1",
             "g": "Publish: FlashAttention from online softmax to tiled kernel",
             "tags": [
-                  "Transformer",
-                  "MHA→MLA",
-                  "CUDA"
+                  "Attention",
+                  "Online softmax",
+                  "FlashAttention"
             ],
             "days": [
                   [
                         "Mon",
-                        "Workshop session 16",
-                        "derive safe online softmax and tiled attention recurrence."
+                        "Attention as a kernel problem",
+                        "Re-derive QK^T, softmax, PV, FLOPs, bytes, and prefill-vs-decode behavior."
                   ],
                   [
                         "Tue",
-                        "Implement CPU/PyTorch online-softmax reference",
-                        "adversarial numerical tests."
+                        "Online softmax derivation",
+                        "Implement stable softmax and chunked/online softmax in CPU/PyTorch; prove equivalence numerically."
                   ],
                   [
                         "Wed",
-                        "Workshop session 17",
-                        "implement forward FlashAttention-1 in Triton or CUDA, non-causal first."
+                        "FlashAttention forward baseline",
+                        "Implement forward FlashAttention-1 in Triton or CUDA, non-causal first."
                   ],
                   [
                         "Thu",
-                        "Add causal mask, ragged sequence handling, MHA/GQA head mapping",
-                        "parity tests."
+                        "Causal and ragged handling",
+                        "Add causal mask, ragged sequence handling, and MHA/GQA head mapping; parity tests."
                   ],
                   [
                         "Fri",
-                        "Workshop session 18",
-                        "profile against SDPA across sequence lengths and head dimensions."
+                        "SDPA comparison",
+                        "Profile against SDPA across sequence lengths and head dimensions; compare HBM traffic to naive attention."
                   ],
                   [
                         "Sat",
-                        "Finish forward kernel and benchmark report",
-                        "optional backward only if forward is robust."
+                        "Finish forward kernel",
+                        "Finish forward kernel and benchmark report; optional backward only if forward is robust."
                   ],
                   [
                         "Sun",
                         "Publish Blog 16: “FlashAttention from online softmax to tiled kernel”",
-                        "."
+                        "Explain the tile-by-tile IO-aware algorithm and numerical rescaling."
                   ]
             ]
       },
@@ -1214,48 +1214,48 @@
             "n": 17,
             "p": "triton",
             "date": "Nov 23–29",
-            "t": "Workshop Week 7 + FA2/FA3 and Hopper",
+            "t": "FA2 → FA3, Hopper GEMM, and async scheduling",
             "g": "Publish: FA1 to FA3: same attention, different schedules",
             "tags": [
-                  "Transformer",
-                  "GEMM",
-                  "Triton"
+                  "FA2/FA3",
+                  "Hopper",
+                  "TMA/WGMMA"
             ],
             "days": [
                   [
                         "Mon",
-                        "Workshop session 19",
-                        "read FA2; identify work-partitioning changes from FA1."
+                        "FlashAttention-2 work partitioning",
+                        "Read FA2; identify how work partitioning and parallelism changed from FA1."
                   ],
                   [
                         "Tue",
-                        "Implement one FA2 scheduling improvement",
-                        "measure occupancy and parallelism changes."
+                        "Implement one FA2 improvement",
+                        "Implement one scheduling improvement; measure occupancy and parallelism changes."
                   ],
                   [
                         "Wed",
-                        "Workshop session 20",
-                        "study Hopper TMA, WGMMA, async barriers, warp specialization."
+                        "Hopper primitives",
+                        "Study Hopper TMA, WGMMA, async barriers, warp specialization, and the Hopper tuning guide."
                   ],
                   [
                         "Thu",
-                        "Read FA3",
-                        "trace producer/consumer pipeline and overlap on paper; inspect official code paths."
+                        "FlashAttention-3 pipeline",
+                        "Read FA3; trace producer/consumer pipeline and overlap on paper; inspect official code paths."
                   ],
                   [
                         "Fri",
-                        "Workshop session 21",
-                        "build/run a persistent or TMA Triton matmul if hardware permits; otherwise analyze profiles supplied by course."
+                        "Persistent/TMA matmul lab",
+                        "Run or analyze a persistent/TMA Triton or CuTe matmul; annotate overlap and synchronization."
                   ],
                   [
                         "Sat",
-                        "FA1→FA2→FA3 comparative report",
-                        "distinguish algorithm, schedule, and hardware features."
+                        "FA1→FA2→FA3 report",
+                        "Distinguish algorithm, schedule, and hardware features in a comparative report."
                   ],
                   [
                         "Sun",
                         "Publish Blog 17: “FA1 to FA3: same attention, different schedules”",
-                        "."
+                        "Commit the report and any runnable Hopper-era experiments."
                   ]
             ]
       },
@@ -1263,48 +1263,48 @@
             "n": 18,
             "p": "triton",
             "date": "Nov 30–Dec 6",
-            "t": "Workshop Week 8 + CUTLASS/CuTe/Blackwell",
+            "t": "Triton → CUTLASS → CuTe, Blackwell, NVFP4, and FA4",
             "g": "Publish: From CUDA to CuTe DSL—and what Blackwell changes",
             "tags": [
-                  "cost model",
-                  "CUDA",
-                  "GEMM"
+                  "CUTLASS/CuTe",
+                  "Blackwell",
+                  "FA4"
             ],
             "days": [
                   [
                         "Mon",
-                        "Workshop session 22",
-                        "CUTLASS hierarchy and CuTe layouts as functions; work layout exercises."
+                        "CUTLASS and CuTe layout algebra",
+                        "Study CUTLASS hierarchy and CuTe layouts as functions; work layout exercises."
                   ],
                   [
                         "Tue",
-                        "Run/edit a CUTLASS GEMM example",
-                        "map thread/value layouts to memory addresses."
+                        "Trace CUTLASS GEMM",
+                        "Run/edit a CUTLASS GEMM example; map global memory → shared memory → registers → MMA → epilogue."
                   ],
                   [
                         "Wed",
-                        "Workshop session 23",
-                        "Blackwell SM100, tcgen05, TMEM, NVFP4; read official architecture material."
+                        "Blackwell and NVFP4",
+                        "Study Blackwell SM100, tcgen05, TMEM, NVFP4, and tuning-guide bottleneck shifts."
                   ],
                   [
                         "Thu",
-                        "Run CuTe DSL quick start or do",
-                        "Run CuTe DSL quick start or do code-level walkthrough if no Blackwell access."
+                        "CuTe DSL quick start",
+                        "Run CuTe DSL quick start or do a code-level walkthrough if no Blackwell access."
                   ],
                   [
                         "Fri",
-                        "Workshop session 24",
-                        "Triton block-scaled FP4/FP8 matmul; explain scale layout/preshuffling."
+                        "Block-scaled FP4/FP8 matmul",
+                        "Study Triton block-scaled matmul; explain scale layout, preshuffling, and hardware requirements."
                   ],
                   [
                         "Sat",
-                        "Create a CUDA/Triton/CUTLASS/CuTe decision matrix and one",
-                        "Create a CUDA/Triton/CUTLASS/CuTe decision matrix and one equivalent small op in two DSLs."
+                        "FlashAttention-4 diff",
+                        "Read FA4 with FA3 open; compare bottlenecks, hardware primitives, softmax strategy, datatype path, and backward-pass changes."
                   ],
                   [
                         "Sun",
                         "Publish Blog 18: “From CUDA to CuTe DSL—and what Blackwell changes”",
-                        "."
+                        "Commit the decision matrix and FA3→FA4/Blackwell notes."
                   ]
             ]
       },
@@ -1312,48 +1312,48 @@
             "n": 19,
             "p": "triton",
             "date": "Dec 7–13",
-            "t": "Workshop close + DeepSeek and AI-written kernels",
+            "t": "DeepSeek kernels, DeepEP, KernelBench, and AI-written kernels",
             "g": "Publish: DeepSeek kernels and the agent–profiler loop",
             "tags": [
-                  "Evaluation",
-                  "MHA→MLA",
-                  "GEMM"
+                  "DeepSeek",
+                  "KernelBench",
+                  "AI kernels"
             ],
             "days": [
                   [
                         "Mon",
-                        "Workshop session 25",
-                        "inspect DeepGEMM architecture, grouped GEMM, FP8 paths, scheduling."
+                        "DeepGEMM archaeology",
+                        "Inspect DeepGEMM architecture, grouped GEMM, BF16/FP8/FP4 paths, tile shapes, and scheduling."
                   ],
                   [
                         "Tue",
-                        "Inspect FlashMLA and connect kernel layout to MLA cache design",
-                        "run supported benchmarks."
+                        "FlashMLA and MLA cache layout",
+                        "Inspect FlashMLA; connect kernel layout to MLA/sparse attention cache design and run supported benchmarks."
                   ],
                   [
                         "Wed",
-                        "Read KernelBench",
-                        "run baseline generation/evaluation loop on several Level-1 kernels."
+                        "DeepEP communication kernels",
+                        "Inspect DeepEP expert-parallel communication; identify operation, shapes, datatype, target architecture, and bottleneck."
                   ],
                   [
                         "Thu",
-                        "Study AlphaEvolve’s evaluator/search loop",
-                        "design an agent+tests+profiler optimization loop."
+                        "KernelBench methodology",
+                        "Read KernelBench and run baseline generation/evaluation on several Level-1/2 operators."
                   ],
                   [
                         "Fri",
-                        "Execute loop manually/with tooling on one kernel",
-                        "reject incorrect “fast” candidates."
+                        "Agent + profiler loop",
+                        "Study AlphaEvolve-style evaluator/search loops; manually optimize one operator and reject incorrect fast candidates."
                   ],
                   [
                         "Sat",
-                        "Release GPU Kernel Worklog v1.0",
-                        "include capstone proposal and benchmark methodology."
+                        "GPU Kernel Worklog v1.0",
+                        "Release the worklog with capstone proposal, benchmark methodology, and kernel archaeology notes."
                   ],
                   [
                         "Sun",
                         "Publish flagship Blog 19: “DeepSeek kernels and the agent–profiler loop”",
-                        "."
+                        "Explain correctness, speedup, overfitting, and transferable optimization insight."
                   ]
             ]
       },
@@ -1371,38 +1371,38 @@
             "days": [
                   [
                         "Mon",
-                        "Review Vizuara inference lectures on prefill/decode, latency/throughput, memory",
-                        "derive TTFT/TPOT/ITL."
+                        "Inference anatomy from public resources",
+                        "Review public inference resources on prefill/decode, latency/throughput, memory; derive TTFT/TPOT/ITL."
                   ],
                   [
                         "Tue",
-                        "Build single-request autoregressive loop with contiguous KV cache",
-                        "verify logits vs no-cache path."
+                        "Single-request cached generation",
+                        "Build single-request autoregressive loop with contiguous KV cache; verify logits vs no-cache path."
                   ],
                   [
                         "Wed",
-                        "Add static batching",
-                        "measure padding waste and tail effects for mixed prompt/output lengths."
+                        "Static batching baseline",
+                        "Add static batching; measure padding waste and tail effects for mixed prompt/output lengths."
                   ],
                   [
                         "Thu",
-                        "Implement iteration-level continuous batching scheduler and request",
+                        "Continuous batching scheduler",
                         "Implement iteration-level continuous batching scheduler and request state machine."
                   ],
                   [
                         "Fri",
-                        "Build workload generator and metric recorder: request",
+                        "Metrics and load generator",
                         "Build workload generator and metric recorder: request rate, p50/p95/p99 TTFT/TPOT/E2E, throughput."
                   ],
                   [
                         "Sat",
-                        "Load test static vs continuous batching",
-                        "find saturation and SLO knee."
+                        "Static vs continuous load test",
+                        "Load test static vs continuous batching; find saturation and SLO knee."
                   ],
                   [
                         "Sun",
                         "Publish Blog 20: “Prefill, decode, and continuous batching from scratch”",
-                        "."
+                        "Commit benchmarks, workload config, and SLO notes."
                   ]
             ]
       },
@@ -1567,38 +1567,38 @@
             "days": [
                   [
                         "Mon",
-                        "Vizuara 5D: collectives/topology",
-                        "implement or trace ring all-reduce; benchmark NCCL primitives."
+                        "Collectives and topology",
+                        "Study public collectives/topology material; implement or trace ring all-reduce; benchmark NCCL primitives."
                   ],
                   [
                         "Tue",
-                        "Data parallelism, DDP, ZeRO/FSDP",
-                        "derive memory/communication; run 2-GPU FSDP if available."
+                        "Data parallelism and sharding",
+                        "Data parallelism, DDP, ZeRO/FSDP; derive memory/communication; run 2-GPU FSDP if available."
                   ],
                   [
                         "Wed",
                         "Tensor and sequence parallelism",
-                        "shard MLP/attention; count collectives; run PyTorch TP example."
+                        "Shard MLP/attention; count collectives; run PyTorch TP example."
                   ],
                   [
                         "Thu",
                         "Pipeline parallelism",
-                        "derive bubble fraction; simulate GPipe/1F1B/interleaving schedules."
+                        "Derive bubble fraction; simulate GPipe/1F1B/interleaving schedules."
                   ],
                   [
                         "Fri",
                         "Context and expert parallelism",
-                        "implement toy context split and MoE all-to-all routing."
+                        "Implement toy context split and MoE all-to-all routing."
                   ],
                   [
                         "Sat",
-                        "Compose a 5D placement planner: model/hardware/topology/SLO →",
-                        "Compose a 5D placement planner: model/hardware/topology/SLO → DP/TP/PP/CP/EP degrees."
+                        "5D placement planner",
+                        "Compose model/hardware/topology/SLO → DP/TP/PP/CP/EP degrees."
                   ],
                   [
                         "Sun",
                         "Publish Blog 24: “Choosing five dimensions of parallelism”",
-                        "."
+                        "Commit planner, diagrams, and communication math."
                   ]
             ]
       },
@@ -1607,7 +1607,7 @@
             "p": "launch",
             "date": "Jan 18–24",
             "t": "Disaggregated serving and flagship capstone",
-            "g": "tag release candidate.",
+            "g": "Publish: Disaggregated inference and the KV-transfer tax",
             "tags": [
                   "cost model",
                   "KV cache",
@@ -1647,7 +1647,7 @@
                   [
                         "Sun",
                         "Publish Blog 25: “Disaggregated inference and the KV-transfer tax”",
-                        "tag release candidate."
+                        "Commit the release candidate, architecture notes, and capstone benchmark evidence."
                   ]
             ]
       },
@@ -1656,7 +1656,7 @@
             "p": "launch",
             "date": "Jan 25–31",
             "t": "Release, interviews, and application package",
-            "g": "freeze portfolio.",
+            "g": "Publish: Building an inference stack from model math to serving",
             "tags": [
                   "Roofline",
                   "GEMM",
@@ -1696,7 +1696,7 @@
                   [
                         "Sun",
                         "Publish flagship Blog 26: “Building an inference stack from model math to serving”",
-                        "freeze portfolio."
+                        "Freeze portfolio, final demos, interview dossiers, and launch checklist."
                   ]
             ]
       }
@@ -1816,14 +1816,29 @@
       flashmla: ["FlashMLA Source", "https://github.com/deepseek-ai/FlashMLA"],
       kernelbench: ["KernelBench", "https://github.com/ScalingIntelligence/KernelBench"],
       alphaevolve: ["AlphaEvolve", "https://deepmind.google/discover/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/"],
-      vizuaraInference: ["Vizuara Inference Workshop", "https://inference.vizuara.ai/"],
+      godbolt: ["Compiler Explorer", "https://godbolt.org/"],
+      highway: ["Google Highway SIMD", "https://github.com/google/highway"],
+      openmp: ["OpenMP Resources", "https://www.openmp.org/resources/"],
+      berkeleyRoofline: ["Berkeley Roofline Paper", "https://crd.lbl.gov/assets/pubs_presos/roofline-sc09.pdf"],
+      binaryUtils: ["CUDA Binary Utilities", "https://docs.nvidia.com/cuda/cuda-binary-utilities/"],
+      nvcc: ["NVCC Compiler Driver", "https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/"],
+      wmma: ["CUDA WMMA Guide", "https://docs.nvidia.com/cuda/cuda-c-programming-guide/#warp-matrix-functions"],
+      onlineSoftmax: ["Online Softmax Note", "https://arxiv.org/abs/1805.02867"],
+      hopperTuning: ["Hopper Tuning Guide", "https://docs.nvidia.com/cuda/hopper-tuning-guide/"],
+      blackwellTuning: ["Blackwell Tuning Guide", "https://docs.nvidia.com/cuda/blackwell-tuning-guide/contents.html"],
+      fa4: ["FlashAttention-4 Paper", "https://arxiv.org/abs/2603.05451"],
+      fa4fp4: ["FP4 FlashAttention-4", "https://arxiv.org/abs/2609.04105"],
+      deepep: ["DeepEP Source", "https://github.com/deepseek-ai/DeepEP"],
+      kernelbenchPaper: ["KernelBench Paper", "https://arxiv.org/abs/2502.10517"],
+      kernelbenchVerified: ["KernelBench-Verified", "https://arxiv.org/abs/2607.16241"],
+      vizuaraInference: ["Public Inference Visuals", "https://vizuaraai.github.io/convolution-musical-journey/visual-walkthroughs.html"],
       vizuaraVisuals: ["Vizuara Visual Library", "https://vizuaraai.github.io/convolution-musical-journey/visual-walkthroughs.html"],
       trtllmDocs: ["TensorRT-LLM Docs", "https://nvidia.github.io/TensorRT-LLM/"],
       rayServe: ["Ray Serve LLM", "https://docs.ray.io/en/latest/serve/llm/index.html"],
       titansSurvey: ["Taming the Titans Survey", "https://arxiv.org/abs/2504.19720"],
       qlora: ["QLoRA Paper", "https://arxiv.org/abs/2305.14314"],
       llamaCpp: ["llama.cpp", "https://github.com/ggml-org/llama.cpp"],
-      vizuara5d: ["Vizuara 5D Parallelism", "https://5d-parallelism.vizuara.ai/"],
+      vizuara5d: ["Megatron-Core Parallelism", "https://docs.nvidia.com/megatron-core/developer-guide/latest/user-guide/parallelism-guide.html"],
       pytorchDist: ["PyTorch Distributed", "https://pytorch.org/tutorials/beginner/dist_overview.html"],
       fsdp: ["PyTorch FSDP", "https://docs.pytorch.org/tutorials/intermediate/FSDP_tutorial.html"],
       pytorchTP: ["PyTorch Tensor Parallel", "https://pytorch.org/tutorials/intermediate/TP_tutorial.html"],
@@ -1844,18 +1859,18 @@
       5: ["longformer", "bigbird", "nsa"],
       6: ["annotatedS4", "mamba", "mambaRepo"],
       7: ["mamba2", "jamba", "kimi"],
-      8: ["roofline", "nsight", "cs149"],
+      8: ["berkeleyRoofline", "roofline", "godbolt"],
       9: ["cuda", "gpuPuzzles", "cudaMode"],
       10: ["best", "nsight", "roofline"],
-      11: ["boehm", "cuda", "nsight"],
-      12: ["boehm", "tritonMatmul", "benchmarking"],
-      13: ["cutlass", "cuda", "nsight"],
+      11: ["boehm", "cutlass", "best"],
+      12: ["boehm", "cutlass", "benchmarking"],
+      13: ["wmma", "computeSanitizer", "binaryUtils"],
       14: ["triton", "tritonApi", "tritonSoftmax"],
       15: ["computeSanitizer", "nsight", "nsys"],
       16: ["fa1", "faRepo", "triton"],
-      17: ["fa2", "fa3", "hopper"],
-      18: ["cutlass", "cute", "blackwell"],
-      19: ["deepgemm", "flashmla", "kernelbench"],
+      17: ["fa2", "fa3", "hopperTuning"],
+      18: ["cutlass", "cute", "fa4"],
+      19: ["deepgemm", "flashmla", "deepep"],
       20: ["vizuaraInference", "vllmDocs", "benchmarking"],
       21: ["paged", "vllmBlog", "sglang"],
       22: ["smoothquant", "awq", "eagle"],
@@ -1881,14 +1896,17 @@
       if (/longformer|bigbird|sparse|sliding-window|nsa|dsa|learned indexer|top-k selector/.test(text)) add("longformer", "bigbird", "nsa");
       if (/s4|ssm|state space|selective scan|mamba/.test(text)) add("annotatedS4", "mamba", "mambaRepo");
       if (/mamba-2|ssd|jamba|moe|router|deltanet|kimi|hybrid/.test(text)) add("mamba2", "jamba", "kimi");
-      if (/cpu simd|ilp|cache hierarchy|compiler vectorization/.test(text)) add("cs149", "dlsys", "mlsysbook");
-      if (/gpu puzzles|saxpy|grid-stride|stencil|ptx|sass/.test(text)) add("gpuPuzzles", "cuda", "cudaMode");
+      if (/cpu simd|simd|ilp|cache hierarchy|compiler vectorization|scalar loop|threaded/.test(text)) add("godbolt", "highway", "openmp");
+      if (/roofline|arithmetic intensity|ridge point|predict/.test(text)) add("berkeleyRoofline", "roofline", "nsight");
+      if (/gpu puzzles|saxpy|grid-stride|stencil/.test(text)) add("gpuPuzzles", "cuda", "cudaMode");
+      if (/ptx|sass|cuobjdump|nvdisasm/.test(text)) add("binaryUtils", "nvcc", "cuda");
       if (/compute sanitizer|race|out-of-bounds|minimal repro|debug/.test(text)) add("computeSanitizer", "nsight", "nsys");
-      if (/wmma|tensor-core|tensor core|accumulator precision/.test(text)) add("cutlass", "cuda", "nsight");
+      if (/wmma|tensor-core|tensor core|accumulator precision|fragment|mma/.test(text)) add("wmma", "cutlass", "cuda");
       if (/block pointers|triton tutorial|thinking in triton|programs, blocks, masks/.test(text)) add("triton", "tritonApi", "tritonSoftmax");
       if (/deepgemm|grouped gemm/.test(text)) add("deepgemm", "fp8", "deepseek");
       if (/flashmla/.test(text)) add("flashmla", "mla", "deepseek");
-      if (/kernelbench|alphaevolve|agent\\+tests|agent–profiler|ai-written/.test(text)) add("kernelbench", "alphaevolve", "correctness");
+      if (/deepep|expert-parallel communication/.test(text)) add("deepep", "nccl", "megatronRepo");
+      if (/kernelbench|alphaevolve|agent\\+tests|agent \\+ profiler|agent–profiler|ai-written/.test(text)) add("kernelbench", "kernelbenchPaper", "alphaevolve");
       if (/vizuara inference|prefill\/decode|prefill|decode|tpot|itl|ttft/.test(text)) add("vizuaraInference", "vllmDocs", "benchmarking");
       if (/static batching|continuous batching|scheduler|state machine/.test(text)) add("orca", "vllmDocs", "benchmarking");
       if (/http\/grpc|health|readiness|admission control|backpressure|structured outputs|guided decoding|containerize|dashboards|chaos/.test(text)) add("fastapi", "rayServe", "sre");
@@ -1923,9 +1941,9 @@
       if (/gptq/.test(text)) add("gptq", "awq");
       if (/awq|w4a16|4-bit|weight packing|nibble/.test(text)) add("awq", "gptq");
       if (/fp8|e4m3/.test(text)) add("fp8", "hopper");
-      if (/hopper|h100|tma|wgmma|tensor core/.test(text)) add("hopper", "tma");
+      if (/hopper|h100|tma|wgmma|warp specialization|producer\/consumer/.test(text)) add("hopperTuning", "fa3", "tma");
       if (/thunderkittens/.test(text)) add("tk", "fa3");
-      if (/blackwell|nvfp4/.test(text)) add("blackwell", "fp8");
+      if (/blackwell|nvfp4|sm100|tcgen05|tmem|block-scaled|fa4|flashattention-4/.test(text)) add("blackwellTuning", "fa4", "fa4fp4");
       if (/paged|block table|block manager|fragmentation|copy-on-write|kv block|kv cache/.test(text)) add("paged", "vllmBlog");
       if (/eagle/.test(text)) add("eagle2", "eagle");
       if (/medusa|speculative|draft model|acceptance|verification|rejection sampling/.test(text)) add("eagle", "medusa");
